@@ -23,25 +23,14 @@ module.exports = {
 function parseData(processedFile, next) {
     const data = processedFile.data;
 
-    // dictionaryItems();
-
     parseRegularExpressions(data);
     parseDictionaryTitles(data);
+    parseDictionaryProfiles(data);
 
     if (_.isFunction(next)) {
         next(resumeData);
     }
 }
-
-// function dictionaryItems() {
-//     _.forEach(dictionary.titles, (titles, key) => {
-//         let expressions = [];
-//         _.forEach(titles, (title) => {
-//             expressions.push(title, title.toUpperCase());
-//         });
-//         dictionary.titles[key] = expressions;
-//     });
-// }
 
 /**
  * Parse the content by regular expressions.
@@ -100,5 +89,15 @@ function parseDictionaryTitles(data) {
  * @param data Resume file data. 
  */
 function parseDictionaryProfiles(data) {
-
+    const dictionaryProfiles = dictionary.profiles;
+    let profileFound = false;
+    resumeData.setItemObject('profiles');
+    _.forEach(dictionaryProfiles, (expressions, key) => {
+        _.forEach(expressions, (expression) => {
+            profileFound = new RegExp(expression).exec(data);
+            if (profileFound) {
+                resumeData.setItemObject('profiles', key, profileFound[4]);
+            }
+        });
+    });
 }

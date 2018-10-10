@@ -2,10 +2,13 @@
 const _ = require('underscore');
 
 module.exports = function() {
-    return new Resume();
+    return new ResumeData();
 };
 
-class Resume {
+/**
+ * Resume Data
+ */
+class ResumeData {
     constructor() {
         this.data = {};
     }
@@ -26,18 +29,26 @@ class Resume {
         }
     }
 
-    // setItemObject(key, options) {
-    //     if (!_.has(this.data, key)) {
-    //         this.data[key] = {};
-    //     }
-
-    //     _.forEach(options, (optionValue, optionKey) => {
-    //         optionValue = optionValue.trim() || '';
-    //         if (optionValue) {
-    //             this.data[key][optionKey] = optionValue;
-    //         }
-    //     });
-    // }
+    /**
+     * Sets a resume object data item.
+     * @param object Object.
+     * @param key Key.
+     * @param value Value or data.
+     */
+    setItemObject(object, key, value) {
+        if (!_.has(this.data, object)) {
+            this.data[object] = {};
+        } else {
+            value = value.trim() || '';
+            if (value) {
+                if (_.has(this.data[object], key)) {
+                    this.data[object][key] += value;
+                } else {
+                    this.data[object][key] = value;
+                }
+            }
+        }
+    }
 
     /**
      * Converts javascript object data to JSON string.

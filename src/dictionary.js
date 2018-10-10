@@ -14,10 +14,16 @@ module.exports = {
         education: ['education'],
         skills: ['skills', 'technology', 'technologies'],
         projects: ['projects'],
-        links: ['links'],
+        links: ['links', 'profiles'],
         achievements: ['achievements'],
         extracurricular: ['extra curricular'],
         certification: ['certifications'],
         interests: ['interests']
+    },
+    profiles: {
+        github: [/(?:(http(s)?:\/\/)?(www\.)?)(github\.com\/[A-z 0-9 _ -]+\/?)/],
+        linkedin: [/(?:(http(s)?:\/\/)?([\w]+\.)?)(linkedin\.com\/in\/[A-z 0-9 _ -]+\/?)/],
+        twitter: [/(?:(http(s)?:\/\/)?(.*\.)?)(twitter\.com\/[A-z 0-9 _]+\/?)/],
+        facebook: [/(?:(http(s)?:\/\/)?(www\.)?)((facebook|fb)\.com\/[A-z 0-9 _ - \.]+\/?)/]
     }
 };
