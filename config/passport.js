@@ -35,6 +35,7 @@ module.exports = function(passport) {
         secretOrKey: process.env.JWT_SECRET
     }, (jwtPayload, done) => {
         User.findById(jwtPayload._id, (err, user) => {
+            // console.log(user);
             if(err)
                 return done(err, false);
             if(user)
@@ -44,32 +45,32 @@ module.exports = function(passport) {
         });
     }));
 
-    passport.use(new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:8080/api/user/authenticate/google/callback'
-    }, function(accessToken, refreshToken, profile, done) {
-        User.findByEmail(profile.emails[0].value, (err, currentUser) => {
-            if (err) {
-                return done(err, false);
-            }
-            if (currentUser) {
-                return done(null, currentUser);
-            } else {
-                const newUser = new User();
-                newUser.google.id = profile.id;
-                newUser.google.token = accessToken;
-                newUser.name = profile.displayName;
-                newUser.email = profile.emails[0].value;
-                newUser.register((err, user) => {
-                    console.log(err, user);
-                    if(err)
-                        return done(err, false);
-                    else
-                        return done(null, user);
-                });
-            }
-        })
-      }));
+    // passport.use(new GoogleStrategy({
+    //     clientID: process.env.GOOGLE_CLIENT_ID,
+    //     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    //     callbackURL: 'http://localhost:8080/api/user/authenticate/google/callback'
+    // }, function(accessToken, refreshToken, profile, done) {
+    //     User.findByEmail(profile.emails[0].value, (err, currentUser) => {
+    //         if (err) {
+    //             return done(err, false);
+    //         }
+    //         if (currentUser) {
+    //             return done(null, currentUser);
+    //         } else {
+    //             const newUser = new User();
+    //             newUser.google.id = profile.id;
+    //             newUser.google.token = accessToken;
+    //             newUser.name = profile.displayName;
+    //             newUser.email = profile.emails[0].value;
+    //             newUser.register((err, user) => {
+    //                 console.log(err, user);
+    //                 if(err)
+    //                     return done(err, false);
+    //                 else
+    //                     return done(null, user);
+    //             });
+    //         }
+    //     })
+    //   }));
 
 }

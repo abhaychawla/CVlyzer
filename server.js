@@ -8,6 +8,8 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 
+const Grid = require('gridfs-stream');
+
 const app = express();
 
 const environment = process.env.NODE_ENV || 'development';
@@ -27,8 +29,8 @@ if (environment != 'production') {
 
 app.use(cors());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+// app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -38,6 +40,8 @@ require('./config/passport')(passport);
 
 const api = require('./routes/api');
 app.use('/api', api);
+const files = require('./routes/upload');
+app.use('/files', files);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));

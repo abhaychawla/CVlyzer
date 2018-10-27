@@ -32,7 +32,8 @@ router.post('/user/authenticate', (req, res, next) => {
             if (err) {
                 return res.send(err);
             }
-            const token = jwt.sign(user.toJSON(), config.secret, { expiresIn: 604800 });
+            const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: 604800 });
+            
             return res.json({
                 success: true,
                 token: token,
@@ -49,49 +50,45 @@ router.post('/user/authenticate', (req, res, next) => {
 
 });
 
-router.get('/user/authenticate/google', (req, res, next) => {
-    global.clientHost = req.headers.referer;
-    console.log(req.headers.referer);
-    next();
-}, passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-router.get('/user/authenticate/google/callback', passport.authenticate('google'), (req, res, next) => {
-
-    // passport.authenticate('google', function(err, user, info) {
-    //     if (err) {
-    //         throw err;
-    //     }
-    //     if (!user) {
-    //         return res.json({success: false, msg: 'User not found!'});
-    //     } 
-    //     req.login(user, { session: false }, (err) => {
-    //         if (err) {
-    //             return res.send(err);
-    //         }
-            const token = jwt.sign({ id: user.google.id }, config.secret, { expiresIn: 604800 });
-            console.log(token);
-            res.redirect(`/user/authenticate/google/access_token/${token}`);
-            // return res.json({
-            //     success: true,
-            //     token: token,
-            //     user: {
-            //         id: user._id,
-            //         name: user.name,
-            //         email: user.email
-            //     },
-            //     msg: 'Authentication Successful'
-            // });
-        // });
-    // })(req, res, next);
-
-});
-
-router.get('/user/authenticate/google/access_token/:token', (req, res) => {
-    res.redirect(global.clientHost);
-});
-
-router.get('/user/test', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.json({ msg: 'test jwt authentication'});
-});
-
 module.exports = router;
+
+// router.get('/user/authenticate/google', (req, res, next) => {
+//     global.clientHost = req.headers.referer;
+//     console.log(req.headers.referer);
+//     next();
+// }, passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// router.get('/user/authenticate/google/callback', passport.authenticate('google'), (req, res, next) => {
+
+//     // passport.authenticate('google', function(err, user, info) {
+//     //     if (err) {
+//     //         throw err;
+//     //     }
+//     //     if (!user) {
+//     //         return res.json({success: false, msg: 'User not found!'});
+//     //     } 
+//     //     req.login(user, { session: false }, (err) => {
+//     //         if (err) {
+//     //             return res.send(err);
+//     //         }
+//             const token = jwt.sign({ id: user.google.id }, config.secret, { expiresIn: 604800 });
+//             console.log(token);
+//             res.redirect(`/user/authenticate/google/access_token/${token}`);
+//             // return res.json({
+//             //     success: true,
+//             //     token: token,
+//             //     user: {
+//             //         id: user._id,
+//             //         name: user.name,
+//             //         email: user.email
+//             //     },
+//             //     msg: 'Authentication Successful'
+//             // });
+//         // });
+//     // })(req, res, next);
+
+// });
+
+// router.get('/user/authenticate/google/access_token/:token', (req, res) => {
+//     res.redirect(global.clientHost);
+// });

@@ -19,16 +19,17 @@ const UserSchema = new Schema({
         unique: true
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
-    google: {
-        id: {
-            type: String
-        },
-        token: {
-            type: String
-        }
-    }
+    // google: {
+    //     id: {
+    //         type: String
+    //     },
+    //     token: {
+    //         type: String
+    //     }
+    // }
 });
 
 UserSchema.methods.register = function(done) {
