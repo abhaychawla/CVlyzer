@@ -44,7 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.createLoginForm();
     this.alert$ = this.alertService.alertEvent.subscribe((alertEvent: Alert) => {
       const alertType = alertEvent.type;
-      this.router.navigate(['/'], { replaceUrl: true });
+      if (alertType === 'Authentication Success') {
+        this.router.navigate(['/upload'], { replaceUrl: true });
+      }
     });
   }
 
@@ -64,9 +66,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  googleAuth() {
-    window.location.href = 'http://localhost:8080/api/user/authenticate/google';
-  }
+  // googleAuth() {
+  //   window.location.href = 'http://localhost:8080/api/user/authenticate/google';
+  // }
 
   /**
    * Unsubscribes from alerts.

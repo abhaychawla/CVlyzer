@@ -1,9 +1,9 @@
 /** Angular Imports */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 /** rxjs Imports */
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /** Custom Services */
@@ -22,21 +22,17 @@ import { LoginContext } from './login-context.model';
 @Injectable()
 export class AuthenticationService {
 
-  /** Denotes whether the user credentials should persist through sessions. */
-  private rememberMe: boolean;
-
-  /**
-   * Denotes the type of storage:
-   *
-   * Session Storage: User credentials should not persist through sessions.
-   *
-   * Local Storage: User credentials should persist through sessions.
-   */
-  private storage: any;
+  private credentialsKey = 'cvlyzerCredentials';
 
   constructor(private http: HttpClient,
               private alertService: AlertService,
-              private authenticationInterceptor: AuthenticationInterceptor) { }
+              private authenticationInterceptor: AuthenticationInterceptor) {
+                const savedCredentials = JSON.parse(localStorage.getItem(this.credentialsKey));
+
+                if (savedCredentials) {
+                  this.authenticationInterceptor.setAuthorizationToken(savedCredentials.token);
+                }
+               }
 
   /**
    * Registers the user.
@@ -50,19 +46,41 @@ export class AuthenticationService {
 
   login(loginContext: LoginContext) {
     this.alertService.alert({ type: 'Authentication Start', message: 'Please wait...' });
-    return this.http.post(`http://localhost:8080/api/user/authenticate`, loginContext);
+    return this.http.post(`http://localhost:8080/api/user/authenticate`, loginContext)
+    .pipe(
+      map((credentials: any) => {
+        this.onLoginSuccess(credentials);
+        return of(true);
+      })
+    );
+  }
 
-    // success store token and user data
-    // fail message
+  private onLoginSuccess(credentials: any) {
+    this.authenticationInterceptor.setAuthorizationToken(credentials.token);
+    this.setCredentials(credentials);
+    this.alertService.alert({ type: 'Authentication Success', message: `${credentials.username} successfully logged in!` });
+  }
+
+  private setCredentials(credentials?: any) {
+    if (credentials) {
+      localStorage.setItem(this.credentialsKey, JSON.stringify(credentials));
+    } else {
+      localStorage.removeItem(this.credentialsKey);
+    }
   }
 
   isAuthenticated() {
-    return false;
+    return !!(JSON.parse(localStorage.getItem(this.credentialsKey)));
   }
 
   logout() {
-    // clear token user storage
-    // navigate to login
+    this.authenticationInterceptor.removeAuthorization();
+    this.setCredentials();
+    return of(true);
+  }
+
+  getCredentials(): any | null {
+    return JSON.parse(localStorage.getItem(this.credentialsKey));
   }
 
 }

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 /** Http request options headers. */
 const httpOptions = {
   headers: {
-    'Content-Type': 'application/json; charset=utf-8'
+    // 'Content-Type': 'multipart/form-data; charset=utf-8'
   }
 };
 

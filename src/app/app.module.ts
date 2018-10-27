@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { AppRoutingModule } from './app-routing.module';
     CoreModule,
     HomeModule,
     LoginModule,
+    FileUploadModule,
     AppRoutingModule
   ],
   providers: [],
