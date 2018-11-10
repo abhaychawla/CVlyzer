@@ -1,0 +1,184 @@
+<cvlyzer-toolbar></cvlyzer-toolbar>
+
+<div class="container">
+
+  <div fxLayout="row" fxLayoutAlign="end" class="mt-20">
+
+    <button mat-raised-button color="primary" (click)="search()">
+      <fa-icon icon="search"></fa-icon>&nbsp;&nbsp;
+      Search
+    </button>
+
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutAlign="space-between">
+
+    <!-- Filter Type -->
+    <mat-form-field fxFlex="30">
+      <mat-select placeholder="Filter type" [formControl]="filterFormControl">
+        <mat-option *ngFor="let filterType of filterOptions" [value]="filterType.value">
+          {{ filterType.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Master Search -->
+    <mat-form-field class="chip-list" fxFlex="60" *ngIf="filterFormControl.value">
+      <mat-label>Master Search</mat-label>
+      <mat-chip-list #masterChipList>
+        <mat-chip *ngFor="let keyword of masterSearchKeywords"
+          [selectable]="selectable" [removable]="removable" (removed)="remove(keyword)">
+          {{ keyword }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="masterChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <!-- Education -->
+    <mat-form-field class="chip-list" fxFlex="30" *ngIf="!filterFormControl.value">
+      <mat-label>Education</mat-label>
+      <mat-chip-list #educationChipList>
+        <mat-chip *ngFor="let education of query.education"
+          [selectable]="selectable" [removable]="removable" (removed)="removeEducation(education)">
+          {{ education }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="educationChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addEducation($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <!-- Experience -->
+    <mat-form-field class="chip-list" fxFlex="30" *ngIf="!filterFormControl.value">
+      <mat-label>Experience</mat-label>
+      <mat-chip-list #experienceChipList>
+        <mat-chip *ngFor="let experience of query.experience"
+          [selectable]="selectable" [removable]="removable" (removed)="removeExperience(experience)">
+          {{ experience }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="experienceChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addExperience($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <!-- Skills -->
+    <mat-form-field class="chip-list" fxFlex="30" *ngIf="!filterFormControl.value">
+      <mat-label>Skills</mat-label>
+      <mat-chip-list #skillsChipList>
+        <mat-chip *ngFor="let skill of query.skills"
+          [selectable]="selectable" [removable]="removable" (removed)="removeSkills(skill)">
+          {{ skill }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="skillsChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addSkills($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <!-- Certifications -->
+    <mat-form-field class="chip-list" fxFlex="30" *ngIf="!filterFormControl.value">
+      <mat-label>Cerifications</mat-label>
+      <mat-chip-list #certificationsChipList>
+        <mat-chip *ngFor="let cerification of query.certification"
+          [selectable]="selectable" [removable]="removable" (removed)="removeCertification(cerification)">
+          {{ cerification }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="certificationsChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addCertification($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <!-- Projects -->
+    <mat-form-field class="chip-list" fxFlex="30" *ngIf="!filterFormControl.value">
+      <mat-label>Projects</mat-label>
+      <mat-chip-list #projectsChipList>
+        <mat-chip *ngFor="let project of query.projects"
+          [selectable]="selectable" [removable]="removable" (removed)="removeProjects(project)">
+          {{ project }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="projectsChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addProjects($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+  </div>
+
+  <div class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let applicant"> {{ applicant.name }} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+        <td mat-cell *matCellDef="let applicant"> {{ applicant.email}} </td>
+      </ng-container>
+
+      <!-- Profiles Column -->
+      <ng-container matColumnDef="profiles">
+        <th mat-header-cell *matHeaderCellDef> Profiles </th>
+        <td mat-cell *matCellDef="let applicant">
+          <a mat-button target="_blank" [href]="'http://' + applicant.profiles.github" *ngIf="applicant.profiles.github">
+            <fa-icon [icon]="['fab', 'github']" size="lg"></fa-icon>
+          </a>
+          <a mat-button target="_blank" [href]="'http://' + applicant.profiles.linkedin" *ngIf="applicant.profiles.linkedin">
+            <fa-icon [icon]="['fab', 'linkedin']" size="lg"></fa-icon>
+          </a>
+          <a mat-button target="_blank" [href]="'http://' + applicant.profiles.twitter" *ngIf="applicant.profiles.twitter">
+            <fa-icon [icon]="['fab', 'twitter']" size="lg"></fa-icon>
+          </a>
+        </td>
+      </ng-container>
+
+      <!-- Download Resume Column -->
+      <ng-container matColumnDef="downloadResume">
+        <th mat-header-cell *matHeaderCellDef> Download Resume </th>
+        <td mat-cell *matCellDef="let applicant">
+          <a mat-button target="_blank" [href]="applicant.downloadUrl" color="accent">
+            <fa-icon icon="download" size="lg"></fa-icon>
+          </a>
+        </td>
+      </ng-container>
+
+      <!-- View Applicant Column -->
+      <ng-container matColumnDef="viewApplicant">
+        <th mat-header-cell *matHeaderCellDef> View Applicant </th>
+        <td mat-cell *matCellDef="let applicant">
+          <button mat-button [routerLink]="['/applicants/view', applicant.id]" color="primary">
+            <fa-icon icon="eye" size="lg"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+
+  </div>
+
+</div>

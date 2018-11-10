@@ -1,0 +1,66 @@
+<div class="login-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+
+	<div fxFlex="50" fxLayout="row" fxLayoutAlign="center center" fxHide.lt-md>
+		<img src="assets/login-icon.png">
+	</div>
+
+	<div fxFlex="50" fxLayout="row" fxLayoutAlign="center center">
+
+		<mat-card id="login-form">
+
+			<div id="mat-fab">
+				<mat-icon id="lock-icon">lock</mat-icon>
+			</div>
+
+			<h2 class="heading">
+				CVlyzer Login
+			</h2>
+
+			<form fxLayout="column" [formGroup]="loginForm" (ngSubmit)="login()">
+
+				<mat-form-field>
+          <span matPrefix>
+            <fa-icon icon="user-circle" size="lg"></fa-icon>&nbsp;&nbsp;
+          </span>
+          <mat-label>Username</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="username">
+          <mat-error *ngIf="loginForm.controls.username.hasError('required')">
+            Username is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="!loginForm.controls.username.hasError('lowercase') && !loginForm.controls.username.hasError('required')">
+            Username is <strong>invalid</strong>
+          </mat-error>
+				</mat-form-field>
+
+				<mat-form-field>
+          <span matPrefix>
+            <fa-icon icon="lock" size="lg"></fa-icon>&nbsp;&nbsp;
+          </span>
+          <mat-label>Password</mat-label>
+          <input matInput type="{{ passwordInputType }}" formControlName="password">
+          <button mat-button *ngIf="loginForm.controls.password.value && !loading" matSuffix mat-icon-button
+            (mousedown)="passwordInputType = 'text'" (mouseup)="passwordInputType = 'password'">
+            <fa-icon *ngIf="passwordInputType === 'password'" icon="eye"></fa-icon>
+            <fa-icon *ngIf="passwordInputType === 'text'" icon="eye-slash"></fa-icon>
+          </button>
+          <mat-error *ngIf="loginForm.controls.password.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" [disabled]="!loginForm.valid" fxFlexFill class="btn">
+          Login
+          <mat-spinner [diameter]="20" *ngIf="loading"></mat-spinner>
+        </button>
+
+      </form>
+
+      <button mat-button [routerLink]="['/register']" fxFlexFill class="btn" [disabled]="loading">
+        Register
+      </button>
+
+    </mat-card>
+
+  </div>
+
+</div>

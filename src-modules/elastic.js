@@ -21,29 +21,17 @@ function indexExists(indexName) {
 }
 
 function createIndex(indexName) {
-    client.indices.create({
+    return client.indices.create({
         index: indexName
-    }, function(error, res, status) {
-        if (error) {
-            console.log(err);
-        } else {
-            console.log(`Create:  ${res}`);
-        }
     });
 }
 
 function bulkUpload(indexName, files) {
     for(let i = 0; i<files.length; i+=2) {
-        files.splice(i, 0, { index: { _index: indexName } });
+        files.splice(i, 0, { index: { _index: indexName, _type: 'resume' } });
     }
-    client.bulk({
+    return client.bulk({
         body: files
-    }, function(err, res) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(res);
-        }
     });
 }
 
@@ -61,6 +49,14 @@ function searchAll(indexName) {
         }
     });
 } 
+
+function findById(indexName, id) {
+    return client.get({
+        index: indexName,
+        type: 'resume',
+        id: id
+    });
+}
 
 function masterSearch(indexName, query){
     return client.search({
@@ -151,6 +147,7 @@ module.exports = {
     createIndex: createIndex,
     bulkUpload: bulkUpload,
     searchAll: searchAll,
+    findById: findById,
     masterSearch: masterSearch,
     searchByKeyword: searchByKeyword,
     searchByPhrase: searchByPhrase

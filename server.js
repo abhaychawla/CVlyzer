@@ -60,5 +60,5 @@ app.get('*', (req, res) => {
 
 // Start Server
 app.listen(config[environment].port, () => {
-    console.log(`Server Started on Port: ${app.get('port')}`);
+    console.log(`Server Started on Port: ${config[environment].port}`);
 });

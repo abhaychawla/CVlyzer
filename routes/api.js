@@ -10,7 +10,7 @@ router.use('/user', user);
 
 // File Routes
 const files = require('./files');
-router.use('/files', passport.authenticate('jwt', { session: false }), files);
+router.use('/files', files);
 
 // Search Routes
 const search = require('./search');

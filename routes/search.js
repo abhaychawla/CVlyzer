@@ -17,11 +17,22 @@ router.get('/all', (req, res) => {
         });
 });
 
-router.get('/master', (req, res) => {
+router.post('/id', (req, res) => {
+    const name = req.user.username;
+    const id = req.body.id;
+    elastic.findById(name, id)
+        .then(function(response) {
+            res.status(200).json({ success: true, response: response._source })
+        }, function(err) {
+            res.status(400).json({ success: false, err: err });
+        });
+});
+
+router.post('/master', (req, res) => {
     // Query Type: Amity International School AND/OR Java
     const name = req.user.username;
     const query = req.body.query || ['Amity International School', 'Java'];
-    elastic.masterSearch(name, `"${query.join('" AND "')}"`)
+    elastic.masterSearch(name, `"${query.join('" OR "')}"`)
         .then(function(response) {
             res.status(200).json({ success: true, response: response.hits.hits })
         }, function(err) {
@@ -29,7 +40,7 @@ router.get('/master', (req, res) => {
         });
 });
 
-router.get('/keyword', (req, res) => {
+router.post('/keyword', (req, res) => {
     // Query Type: By specific keywords
     const name = req.user.username;
     const query = req.body.query || {
@@ -48,7 +59,7 @@ router.get('/keyword', (req, res) => {
         });
 });
 
-router.get('/phrase', (req, res) => {
+router.post('/phrase', (req, res) => {
     // Query Type: By specific phrases
     const name = req.user.username;
     const query = req.body.query || {

@@ -1,0 +1,148 @@
+<cvlyzer-toolbar></cvlyzer-toolbar>
+
+<div class="container mt-20" *ngIf="applicant">
+
+  <mat-accordion>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          {{ applicant.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+            Personal information
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div>
+        <p *ngIf="applicant.objective">
+            Objective: {{ applicant.objective }}
+        </p>
+
+        <span>
+          Profile Links:
+        </span>
+        <br>
+
+        <span *ngIf="applicant.profiles.github">
+          Github: {{ applicant.profiles.github }}
+        </span>
+        <br>
+
+        <span *ngIf="applicant.profiles.linkedin">
+          LinkedIn: {{ applicant.profiles.linkedin }}
+        </span>
+        <br>
+
+        <span *ngIf="applicant.profiles.twitter">
+          Twitter: {{ applicant.profiles.twitter }}
+        </span>
+        <br>
+
+        <span *ngIf="applicant.profiles.facebook">
+          Facebook: {{ applicant.profiles.facebook }}
+        </span>
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.experience">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Experience
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.experience" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.education">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Education
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.education" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.skills">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Skills
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.skills" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.projects">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Projects
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.projects" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.achievements">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Achievements
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.achievements" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Extracurricular
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.extracurricular" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.certification">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Certification
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.certification" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.interests">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Interests
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.interests" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+</div>

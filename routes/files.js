@@ -7,6 +7,9 @@ const router = express.Router();
 // Database
 const mongoose = require('mongoose');
 
+// Ensure Authentication
+const passport = require('passport');
+
 // Grid FS Storage for Files
 const Grid = require('gridfs-stream');
 const multer = require('multer');
@@ -26,25 +29,41 @@ mongoose.connection.on('connected', () => {
 });
 
 // Upload Files
-router.post('/upload', upload.array('file', 12), (req, res) => {
+router.post('/upload', passport.authenticate('jwt', { session: false }), upload.array('file', 12), (req, res) => {
     res.status(200).json({ success: true, files: req.files, msg: 'Files Uploaded!' });
 });
 
 // Parse Files and Add Data to Elastic Search
-router.post('/parse', (req, res) => {
+router.post('/parse', passport.authenticate('jwt', { session: false }), (req, res) => {
     const name = req.user.username;
     let inputUrlPath;
     const promises = [];
     for (let i = 0; i<req.body.files.length; i++) {
-        inputUrlPath = `http://localhost:8080/files/image/${req.body.files[i].filename}`;
+        inputUrlPath = `http://localhost:8080/api/files/${req.body.files[i].filename}`;
         promises.push(resumeParser.extractAndParseDataFromUrl(inputUrlPath));
     }
-    Promise.all(promises).then(response => {
+    Promise.all(promises).then(data => {
         if (!elastic.indexExists(name)) {
-            elastic.createIndex(name);
+            elastic.createIndex(name)
+                .then(function(response) {
+                    console.log(`Create:  ${response}`);
+                    elastic.bulkUpload(name, data)
+                        .then(function(response) {
+                            res.status(200).json({ success: true, response: data });
+                        }, function(err) {
+                            res.status(400).json({ success: false, err: err });
+                        });
+                }, function(err) {
+                    res.status(400).json({ success: false, err: err });
+                });
+        } else {
+            elastic.bulkUpload(name, data)
+                .then(function(response) {
+                    res.status(200).json({ success: true, response: data });
+                }, function(err) {
+                    res.status(400).json({ success: false, err: err });
+                });
         }
-        elastic.bulkUpload(name, response);
-        res.status(200).json({success: true, response: response});
     });
 });
 

@@ -1,0 +1,79 @@
+<div class="registration-container" fxLayout="row" fxLayoutAlign="space-around center">
+
+  <mat-card id="registration-form">
+
+    <div id="mat-fab">
+      <mat-icon id="lock-icon">lock</mat-icon>
+    </div>
+
+    <h2 class="heading">
+      CVlyzer Registration
+    </h2>
+
+    <form fxLayout="column" [formGroup]="registrationForm" (ngSubmit)="register()">
+
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="name" required>
+        <mat-error *ngIf="registrationForm.controls.name.hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type="text" autocomplete="off" formControlName="username" required>
+        <mat-error *ngIf="registrationForm.controls.username.hasError('required')">
+          Username is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" autocomplete="off" formControlName="email" required>
+        <mat-error *ngIf="registrationForm.controls.email.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="{{ passwordInputType }}" formControlName="password" required>
+        <button mat-button *ngIf="registrationForm.controls.password.value && !loading" matSuffix mat-icon-button
+          (mousedown)="passwordInputType = 'text'" (mouseup)="passwordInputType = 'password'">
+          <fa-icon *ngIf="passwordInputType === 'password'" icon="eye"></fa-icon>
+          <fa-icon *ngIf="passwordInputType === 'text'" icon="eye-slash"></fa-icon>
+        </button>
+        <mat-error *ngIf="registrationForm.controls.password.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="{{ confirmPasswordInputType }}" formControlName="confirmPassword" required>
+        <button mat-button *ngIf="registrationForm.controls.confirmPassword.value && !loading" matSuffix mat-icon-button
+          (mousedown)="confirmPasswordInputType = 'text'" (mouseup)="confirmPasswordInputType = 'password'">
+          <fa-icon *ngIf="confirmPasswordInputType === 'password'" icon="eye"></fa-icon>
+          <fa-icon *ngIf="confirmPasswordInputType === 'text'" icon="eye-slash"></fa-icon>
+        </button>
+        <mat-error *ngIf="registrationForm.controls.confirmPassword.hasError('required')">
+          Confirm Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <p class="confirm-password-error" *ngIf="registrationForm.errors?.passwordsDoNotMatch &&
+        (!registrationForm.controls.password.hasError('required') && !registrationForm.controls.confirmPassword.hasError('required'))">
+        Passwords <strong>do not match</strong>
+      </p>
+
+      <button mat-raised-button color="primary" [disabled]="!registrationForm.valid" class="btn">
+        Register
+        <mat-spinner [diameter]="20" *ngIf="loading"></mat-spinner>
+      </button>
+
+    </form>
+
+  </mat-card>
+
+</div>

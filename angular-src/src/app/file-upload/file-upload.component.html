@@ -1,0 +1,43 @@
+<cvlyzer-toolbar></cvlyzer-toolbar>
+
+<file-drop headertext="Drag and Drop resumes here!" customstyle="file-drop" (onFileDrop)="fileDrop($event)"></file-drop>
+
+<div fxLayout="row" fxLayoutAlign="space-around center" fxLayout.lt-md="column">
+  <button mat-raised-button color="primary" (click)="upload()" [disabled]="filesToUpload.length === 0" class="btn">
+    <fa-icon icon="file-upload" size="lg"></fa-icon>&nbsp;&nbsp;
+    Upload Files
+  </button>
+  <button mat-button (click)="browseFiles.click()" class="btn">
+    Browse Files
+  </button>
+</div>
+<input id="file" name="file" type="file" #browseFiles (change)="fileChange($event)" [style.display]="'none'" multiple>
+
+<div *ngIf="filesToUpload.length !== 0" class="container">
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- S.No. Column -->
+      <ng-container matColumnDef="sno">
+        <th mat-header-cell *matHeaderCellDef> S.No. </th>
+        <td mat-cell *matCellDef="let file; let i = index;"> {{ i + 1 }} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let file"> {{ file.name }} </td>
+      </ng-container>
+
+      <!-- Last Modified Column -->
+      <ng-container matColumnDef="lastModifiedDate">
+        <th mat-header-cell *matHeaderCellDef> Last Modified </th>
+        <td mat-cell *matCellDef="let file"> {{ file.lastModifiedDate | date }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+</div>

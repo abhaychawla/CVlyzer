@@ -1,0 +1,14 @@
+<mat-toolbar fxLayout="row" fxLayoutGap="20px" color="primary">
+
+  <span>CVlyzer</span>
+
+  <button mat-flat-button color="primary" [routerLink]="['/applicants']" routerLinkActive="active-link">View Applicants</button>
+  <button mat-flat-button color="primary" [routerLink]="['/resume-upload']" routerLinkActive="active-link">Upload Resumes</button>
+
+  <span fxFlex="auto"></span>
+
+  <button mat-flat-button color="primary" (click)="logout()">Logout</button>
+
+</mat-toolbar>
+
+<mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
