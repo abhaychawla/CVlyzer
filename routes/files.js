@@ -49,7 +49,10 @@ router.post('/parse', passport.authenticate('jwt', { session: false }), (req, re
                     console.log(`Create:  ${response}`);
                     elastic.bulkUpload(name, data)
                         .then(function(response) {
-                            res.status(200).json({ success: true, response: data });
+                            // To prevent timelag issue
+                            setTimeout(() => {
+                                res.status(200).json({ success: true, response: data });
+                            }, 2000);
                         }, function(err) {
                             res.status(400).json({ success: false, err: err });
                         });
@@ -59,7 +62,10 @@ router.post('/parse', passport.authenticate('jwt', { session: false }), (req, re
         } else {
             elastic.bulkUpload(name, data)
                 .then(function(response) {
-                    res.status(200).json({ success: true, response: data });
+                    // To prevent timelag issue
+                    setTimeout(() => {
+                        res.status(200).json({ success: true, response: data });
+                    }, 2000);
                 }, function(err) {
                     res.status(400).json({ success: false, err: err });
                 });

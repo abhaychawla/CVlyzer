@@ -37,6 +37,8 @@ function bulkUpload(indexName, files) {
 
 function searchAll(indexName) {
     return client.search({
+        from: 0,
+        size: 20,
         index: indexName,
         body: {
             query: {

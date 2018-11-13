@@ -9,14 +9,15 @@ module.exports = {
     },
     titles: {
         objective: ['objective', 'objectives', 'summary'],
-        experience: ['experience', 'experiences'],
+        experience: ['experience', 'experiences', 'work experience'],
         education: ['education'],
         skills: ['skills', 'technology', 'technologies'],
+        links: ['links', 'profiles'],
         projects: ['projects'],
         achievements: ['achievements'],
-        extracurricular: ['extra curricular'],
-        certification: ['certifications'],
-        interests: ['interests']
+        extracurricular: ['extracurricular', 'extra curricular', 'extra-curricular'],
+        certification: ['certification', 'certifications'],
+        interests: ['interests and activities', 'interests']
     },
     profiles: {
         github: [/(?:(http(s)?:\/\/)?(www\.)?)(github\.com\/[A-z 0-9 _ -]+\/?)/],

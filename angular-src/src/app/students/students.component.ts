@@ -226,3 +226,5 @@ export class StudentsComponent implements OnInit {
   }
 
 }
+
+// TODO: Deletion functionality and Show complete list incase search fields are empty

@@ -16,46 +16,47 @@
       </mat-expansion-panel-header>
 
       <div>
+
+        <p *ngIf="applicant.email">
+            Email: {{ applicant.email }}
+        </p>
+
+        <p *ngIf="applicant.phone">
+            Phone: {{ applicant.phone }}
+        </p>
+
         <p *ngIf="applicant.objective">
             Objective: {{ applicant.objective }}
         </p>
 
-        <span>
-          Profile Links:
-        </span>
-        <br>
+        <p *ngIf="applicant.profiles.github || applicant.profiles.linkedin || applicant.profiles.twitter || applicant.profiles.facebook">
 
-        <span *ngIf="applicant.profiles.github">
-          Github: {{ applicant.profiles.github }}
-        </span>
-        <br>
+          <span>
+            Profile Links:
+          </span>
+          <br>
 
-        <span *ngIf="applicant.profiles.linkedin">
-          LinkedIn: {{ applicant.profiles.linkedin }}
-        </span>
-        <br>
+          <span *ngIf="applicant.profiles.github">
+            Github: {{ applicant.profiles.github }}
+            <br>
+          </span>
 
-        <span *ngIf="applicant.profiles.twitter">
-          Twitter: {{ applicant.profiles.twitter }}
-        </span>
-        <br>
+          <span *ngIf="applicant.profiles.linkedin">
+            LinkedIn: {{ applicant.profiles.linkedin }}
+            <br>
+          </span>
 
-        <span *ngIf="applicant.profiles.facebook">
-          Facebook: {{ applicant.profiles.facebook }}
-        </span>
+          <span *ngIf="applicant.profiles.twitter">
+            Twitter: {{ applicant.profiles.twitter }}
+            <br>
+          </span>
+
+          <span *ngIf="applicant.profiles.facebook">
+            Facebook: {{ applicant.profiles.facebook }}
+          </span>
+
+        </p>
       </div>
-
-    </mat-expansion-panel>
-
-    <mat-expansion-panel *ngIf="applicant.experience">
-
-      <mat-expansion-panel-header>
-        <mat-panel-title class="title">
-          Experience
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <p [innerHTML]="applicant.experience" class="format-lines"></p>
 
     </mat-expansion-panel>
 
@@ -68,6 +69,18 @@
       </mat-expansion-panel-header>
 
       <p [innerHTML]="applicant.education" class="format-lines"></p>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="applicant.experience">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+          Experience
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p [innerHTML]="applicant.experience" class="format-lines"></p>
 
     </mat-expansion-panel>
 
@@ -107,7 +120,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="applicant.extracurricular">
 
       <mat-expansion-panel-header>
         <mat-panel-title class="title">
