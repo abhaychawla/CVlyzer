@@ -72,6 +72,7 @@ export class StudentsComponent implements OnInit {
         certification: [],
         projects: []
       };
+      this.setTable();
     });
   }
 

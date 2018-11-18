@@ -65,7 +65,7 @@ router.post('/parse', passport.authenticate('jwt', { session: false }), (req, re
                     // To prevent timelag issue
                     setTimeout(() => {
                         res.status(200).json({ success: true, response: data });
-                    }, 2000);
+                    }, 10000);
                 }, function(err) {
                     res.status(400).json({ success: false, err: err });
                 });
