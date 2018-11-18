@@ -60,6 +60,14 @@ function findById(indexName, id) {
     });
 }
 
+function deleteById(indexName, id) {
+    return client.delete({
+        index: indexName,
+        type: 'resume',
+        id: id
+    });
+}
+
 function masterSearch(indexName, query){
     return client.search({
         index: indexName,
@@ -150,6 +158,7 @@ module.exports = {
     bulkUpload: bulkUpload,
     searchAll: searchAll,
     findById: findById,
+    deleteById: deleteById,
     masterSearch: masterSearch,
     searchByKeyword: searchByKeyword,
     searchByPhrase: searchByPhrase

@@ -17,12 +17,23 @@ router.get('/all', (req, res) => {
         });
 });
 
-router.post('/id', (req, res) => {
+router.get('/:id', (req, res) => {
     const name = req.user.username;
-    const id = req.body.id;
+    const id = req.params.id;
     elastic.findById(name, id)
         .then(function(response) {
             res.status(200).json({ success: true, response: response._source })
+        }, function(err) {
+            res.status(400).json({ success: false, err: err });
+        });
+});
+
+router.delete('/:id', (req, res) => {
+    const name = req.user.username;
+    const id = req.params.id;
+    elastic.deleteById(name, id)
+        .then(function(response) {
+            res.status(200).json({ success: true, response: response._id })
         }, function(err) {
             res.status(400).json({ success: false, err: err });
         });

@@ -5,12 +5,17 @@ import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faAt,
+  faCheckCircle,
   faDownload,
   faEye,
   faEyeSlash,
   faFileUpload,
   faLock,
   faSearch,
+  faSearchPlus,
+  faTrashAlt,
+  faUser,
   faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -21,6 +26,8 @@ import {
 
 /** Add icons to the library for convenient access in other components. */
 library.add(
+  faAt,
+  faCheckCircle,
   faDownload,
   faEye,
   faEyeSlash,
@@ -29,7 +36,10 @@ library.add(
   faLinkedin,
   faLock,
   faSearch,
+  faSearchPlus,
+  faTrashAlt,
   faTwitter,
+  faUser,
   faUserCircle
 );
 

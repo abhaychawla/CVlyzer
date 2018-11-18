@@ -77,7 +77,7 @@ router.post('/parse', passport.authenticate('jwt', { session: false }), (req, re
 router.get('/:filename', (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         if (!file || file.length === 0) {
-            return res.status(400).json({ success: false, msg: 'No file exists!', error: err });
+            return res.status(400).json({ success: false, msg: 'No file exists!', err: err });
         }
         if (file.contentType === 'application/pdf') {
             // Read output to browser
@@ -87,6 +87,16 @@ router.get('/:filename', (req, res) => {
         } else {
             res.status(400).json({ success: false, msg: 'Not a pdf!' });
         }
+    });
+});
+
+// Delete File
+router.delete('/:filename', passport.authenticate('jwt', { session: false }), (req, res) => {
+    gfs.remove({ filename: req.params.filename, root: 'uploads' }, (err, gridStore) => {
+        if (err) {
+            return res.status(400).json({ success: false, err: err });
+        }
+        res.status(200).json({ success: true, msg: 'File Deleted!' });
     });
 });
 

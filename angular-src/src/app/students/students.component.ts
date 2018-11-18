@@ -23,7 +23,7 @@ export class StudentsComponent implements OnInit {
   applicantList: Student[] = [];
   dataSource: MatTableDataSource<Student>;
 
-  displayedColumns: string[] = ['name', 'email', 'profiles', 'downloadResume', 'viewApplicant'];
+  displayedColumns: string[] = ['name', 'email', 'profiles', 'downloadResume', 'viewApplicant', 'deleteApplicant'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -95,6 +95,7 @@ export class StudentsComponent implements OnInit {
     if (index >= 0) {
       this.query.education.splice(index, 1);
     }
+    this.resetTableIfQueryEmpty();
   }
 
   addExperience(event: MatChipInputEvent) {
@@ -113,6 +114,7 @@ export class StudentsComponent implements OnInit {
     if (index >= 0) {
       this.query.experience.splice(index, 1);
     }
+    this.resetTableIfQueryEmpty();
   }
 
   addSkills(event: MatChipInputEvent) {
@@ -131,6 +133,7 @@ export class StudentsComponent implements OnInit {
     if (index >= 0) {
       this.query.skills.splice(index, 1);
     }
+    this.resetTableIfQueryEmpty();
   }
 
   addCertification(event: MatChipInputEvent) {
@@ -149,6 +152,7 @@ export class StudentsComponent implements OnInit {
     if (index >= 0) {
       this.query.certification.splice(index, 1);
     }
+    this.resetTableIfQueryEmpty();
   }
 
   addProjects(event: MatChipInputEvent) {
@@ -166,6 +170,13 @@ export class StudentsComponent implements OnInit {
     const index = this.query.projects.indexOf(value);
     if (index >= 0) {
       this.query.projects.splice(index, 1);
+    }
+    this.resetTableIfQueryEmpty();
+  }
+
+  resetTableIfQueryEmpty() {
+    if (this.query.education.length === 0 && this.query.skills.length === 0 && this.query.experience.length === 0 && this.query.projects.length === 0 && this.query.certification.length === 0) {
+      this.setTable();
     }
   }
 
@@ -188,6 +199,9 @@ export class StudentsComponent implements OnInit {
     const index = this.masterSearchKeywords.indexOf(value);
     if (index >= 0) {
       this.masterSearchKeywords.splice(index, 1);
+    }
+    if (this.masterSearchKeywords.length === 0) {
+      this.setTable();
     }
   }
 
@@ -225,6 +239,16 @@ export class StudentsComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-}
+  /**
+   *
+   */
+  delete(filename: string, id: string) {
+    this.studentsService.deleteApplicant(filename, id).subscribe((id: any) => {
+      this.applicantList = this.applicantList.filter((applicant: Student) => {
+        return applicant.id !== id;
+      });
+      this.setTable();
+    });
+  }
 
-// TODO: Deletion functionality and Show complete list incase search fields are empty
+}

@@ -1,7 +1,10 @@
 export interface Student {
-  name: string,
-  email: string,
-  profiles: Profiles
+  id: string;
+  filename: string;
+  name: string;
+  email: string;
+  profiles: Profiles;
+  downloadUrl: string;
 }
 
 export interface Profiles {

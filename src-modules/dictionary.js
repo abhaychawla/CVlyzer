@@ -17,7 +17,7 @@ module.exports = {
         achievements: ['achievements'],
         extracurricular: ['extracurricular', 'extra curricular', 'extra-curricular'],
         certification: ['certification', 'certifications'],
-        interests: ['interests and activities', 'interests']
+        interests: ['interests']
     },
     profiles: {
         github: [/(?:(http(s)?:\/\/)?(www\.)?)(github\.com\/[A-z 0-9 _ -]+\/?)/],

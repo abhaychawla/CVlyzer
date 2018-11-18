@@ -11,6 +11,7 @@ import { AuthenticationGuard } from './authentication/authentication.guard';
 
 /** Custom Interceptors */
 import { AuthenticationInterceptor } from './authentication/authentication.interceptor';
+import { ErrorHandlerInterceptor } from './error-handler/error-handler.interceptor';
 import { ProgressInterceptor } from './progress-bar/progress.interceptor';
 
 /**
@@ -28,6 +29,11 @@ import { ProgressInterceptor } from './progress-bar/progress.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
       multi: true
     },
     ProgressBarService,
