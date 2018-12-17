@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ data.action }}: Email</h1>
+<div mat-dialog-content>
+  <form [formGroup]="emailForm" fxLayout="column">
+
+    <mat-form-field fxFlex>
+      <mat-label>Subject</mat-label>
+      <input matInput formControlName="subject">
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Description</mat-label>
+      <textarea matInput mat-autosize="true" matAutosizeMinRows="10" matAutosizeMaxRows="10" formControlName="description"></textarea>
+    </mat-form-field>
+
+  </form>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="{ email: false }">Skip Email</button>
+  <button mat-button [mat-dialog-close]="{ email: emailForm.value }">Send Email</button>
+</mat-dialog-actions>

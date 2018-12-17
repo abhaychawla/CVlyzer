@@ -44,8 +44,8 @@ export class StudentsService {
     ));
   }
 
-  masterSearch(query: any) {
-    return this.http.post('http://localhost:8080/api/search/master', { query: query }).pipe(
+  masterSearch(query: any, strictSearch: boolean) {
+    return this.http.post('http://localhost:8080/api/search/master', { query: query, strictSearch: strictSearch }).pipe(
       map((response: any) => {
         let resumeData = [];
         for (const file of response.response) {
@@ -58,8 +58,8 @@ export class StudentsService {
     );
   }
 
-  subSectionSearch(query: any) {
-    return this.http.post('http://localhost:8080/api/search/phrase', { query: query }).pipe(
+  subSectionSearch(query: any, strictSearch: boolean) {
+    return this.http.post('http://localhost:8080/api/search/phrase', { query: query, strictSearch: strictSearch }).pipe(
       map((response: any) => {
         let resumeData = [];
         for (const file of response.response) {
@@ -68,6 +68,31 @@ export class StudentsService {
           resumeData.push(file._source.data.data);
         }
         return resumeData;
+      })
+    );
+  }
+
+  initiateHiringProcess(applicants, email) {
+    return this.http.post('http://localhost:8080/api/applicants/initiate-hiring-process', { applicants: applicants, email: email }).pipe(
+      map((response: any) => {
+        console.log(response);
+        return response.response;
+      })
+    );
+  }
+
+  qualifyApplicants(applicants, email) {
+    return this.http.post('http://localhost:8080/api/applicants/qualify', { applicants: applicants, email: email }).pipe(
+      map((response: any) => {
+        return response.response;
+      })
+    );
+  }
+
+  disqualifyApplicants(applicants, email) {
+    return this.http.post('http://localhost:8080/api/applicants/disqualify', { applicants: applicants, email: email }).pipe(
+      map((response: any) => {
+        return response.response;
       })
     );
   }

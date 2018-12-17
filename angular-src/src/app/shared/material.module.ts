@@ -6,7 +6,9 @@ import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatChipsModule,
+  MatDialogModule,
   MatExpansionModule,
   MatIconModule,
   MatInputModule,
@@ -17,7 +19,8 @@ import {
   MatSnackBarModule,
   MatSortModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 
 /**
@@ -31,7 +34,9 @@ import {
     LayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
+    MatDialogModule,
     MatExpansionModule,
     MatIconModule,
     MatInputModule,
@@ -42,7 +47,8 @@ import {
     MatSnackBarModule,
     MatSortModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTooltipModule
   ],
   providers: [
     {

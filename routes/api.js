@@ -16,4 +16,8 @@ router.use('/files', files);
 const search = require('./search');
 router.use('/search', passport.authenticate('jwt', { session: false }), search);
 
+// Applicants Routes
+const applicants = require('./applicants');
+router.use('/applicants', passport.authenticate('jwt', { session: false }), applicants);
+
 module.exports = router;

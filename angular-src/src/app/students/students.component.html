@@ -2,12 +2,33 @@
 
 <div class="container">
 
-  <div fxLayout="row" fxLayoutAlign="end" class="mt-20">
+  <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px" class="mt-20">
+
+    <button mat-raised-button [disabled]="checkSelectedApplicants(1)" (click)="initiateHiringProcess()">
+      <fa-icon icon="edit"></fa-icon>&nbsp;&nbsp;
+      Initiate Hiring Process
+    </button>
+
+    <button mat-raised-button [disabled]="checkSelectedApplicants(2, 1)" color="accent" (click)="qualifyApplicants()">
+      <fa-icon icon="check"></fa-icon>&nbsp;&nbsp;
+      Qualify
+    </button>
+
+    <button mat-raised-button [disabled]="checkSelectedApplicants(3, 1)" color="warn" (click)="disqualifyApplicants()">
+      <fa-icon icon="times"></fa-icon>&nbsp;&nbsp;
+      Disqualify
+    </button>
 
     <button mat-raised-button color="primary" (click)="search()">
       <fa-icon icon="search"></fa-icon>&nbsp;&nbsp;
       Search
     </button>
+
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="mt-20">
+
+    <mat-checkbox [formControl]="strictSearch">Enable Strict Search</mat-checkbox>
 
   </div>
 
@@ -124,6 +145,23 @@
 
     <table mat-table [dataSource]="dataSource" matSort>
 
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        *ngIf="true">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
@@ -179,6 +217,17 @@
           <button mat-button (click)="delete(applicant.filename, applicant.id)" color="warn">
             <fa-icon icon="trash-alt" size="lg"></fa-icon>
           </button>
+        </td>
+      </ng-container>
+
+      <!-- Applicant Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let applicant">
+          <fa-icon *ngIf="!applicant.status" matTooltip="New Applicant" matTooltipPosition="right" icon="user-plus" size="lg"></fa-icon>
+          <fa-icon *ngIf="applicant.status === 1" matTooltip="In Process" matTooltipPosition="right" icon="edit" size="lg"></fa-icon>
+          <fa-icon *ngIf="applicant.status === 2" matTooltip="Qualified" matTooltipPosition="right" icon="check" size="lg"></fa-icon>
+          <fa-icon *ngIf="applicant.status === 3" matTooltip="Disqualified" matTooltipPosition="right" icon="times" size="lg"></fa-icon>
         </td>
       </ng-container>
 

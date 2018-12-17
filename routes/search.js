@@ -40,29 +40,15 @@ router.delete('/:id', (req, res) => {
 });
 
 router.post('/master', (req, res) => {
-    // Query Type: Amity International School AND/OR Java
+    // Query Type Example(Phrases/Keywords): Amity International School AND/OR Java
     const name = req.user.username;
-    const query = req.body.query || ['Amity International School', 'Java'];
-    elastic.masterSearch(name, `"${query.join('" OR "')}"`)
-        .then(function(response) {
-            res.status(200).json({ success: true, response: response.hits.hits })
-        }, function(err) {
-            res.status(400).json({ success: false, err: err });
-        });
-});
-
-router.post('/keyword', (req, res) => {
-    // Query Type: By specific keywords
-    const name = req.user.username;
-    const query = req.body.query || {
-        skills: ['Java'],
-        education: ['Amity', 'Montessori'],
-        achievement: [''],
-        experience: [''],
-        certification: ['icpcid'],
-        projects: ['nodejs', 'angular']
-    };
-    elastic.searchByKeyword(name, query)
+    let query = req.body.query;
+    if (req.body.strictSearch) {
+        query = query.join('" AND "');
+    } else {
+        query = query.join('" OR "');
+    }
+    elastic.masterSearch(name, `"${query}"`)
         .then(function(response) {
             res.status(200).json({ success: true, response: response.hits.hits })
         }, function(err) {
@@ -73,13 +59,23 @@ router.post('/keyword', (req, res) => {
 router.post('/phrase', (req, res) => {
     // Query Type: By specific phrases
     const name = req.user.username;
-    const query = req.body.query || {
-        skills: [''],
-        education: ['Amity International School', 'Montessori School'],
-        achievement: [''],
-        experience: [''],
-        certification: [''],
-        projects: ['']
+    let query = req.body.query;
+    if (req.body.strictSearch) {
+        query = {
+            skills: query.skills.join('" AND "'),
+            education: query.education.join('" AND "'),
+            experience: query.experience.join('" AND "'),
+            certification: query.certification.join('" AND "'),
+            projects: query.projects.join('" AND "')
+        };
+    } else {
+        query = {
+            skills: query.skills.join('" OR "'),
+            education: query.education.join('" OR "'),
+            experience: query.experience.join('" OR "'),
+            certification: query.certification.join('" OR "'),
+            projects: query.projects.join('" OR "')
+        };
     }
     elastic.searchByPhrase(name, query)
         .then(function(response) {

@@ -32,6 +32,9 @@
         <mat-error *ngIf="registrationForm.controls.username.hasError('required')">
           Username is <strong>required</strong>
         </mat-error>
+        <mat-error *ngIf="!registrationForm.controls.username.hasError('lowercase') && !registrationForm.controls.username.hasError('required')">
+          Username is <strong>invalid</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -42,6 +45,9 @@
         <input matInput type="email" autocomplete="off" formControlName="email" required>
         <mat-error *ngIf="registrationForm.controls.email.hasError('required')">
           Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="!registrationForm.controls.email.hasError('email') && !registrationForm.controls.email.hasError('required')">
+          Email is <strong>invalid</strong>
         </mat-error>
       </mat-form-field>
 

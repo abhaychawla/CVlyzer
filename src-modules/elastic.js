@@ -35,6 +35,23 @@ function bulkUpload(indexName, files) {
     });
 }
 
+function bulkUpdate(indexName, applicants, status) {
+    for(let i = 0; i<applicants.length; i+=2) {
+        applicants.splice(i, 0, { update: { _index: indexName, _type: 'resume', _id: applicants[i].id } });
+        applicants[i+1] = { 
+            script: {
+                source: 'ctx._source.data.data.status = params.status',
+                params: {
+                    status: status
+                }
+            }
+        };
+    }
+    return client.bulk({
+        body: applicants
+    });
+}
+
 function searchAll(indexName) {
     return client.search({
         from: 0,
@@ -68,41 +85,21 @@ function deleteById(indexName, id) {
     });
 }
 
-function masterSearch(indexName, query){
+function masterSearch(indexName, query) {
     return client.search({
         index: indexName,
         body: {
             query: {
                 query_string: {
                     query: query,
-                    fields: ['*.*']
+                    all_fields: true
                 }
             }
         }
     });
 }
 
-function searchByKeyword(indexName, query){
-    return client.search({
-        index: indexName,
-        body: {
-            query: {
-                bool: {
-                    should: [
-                        { match: { 'data.data.skills': query.skills.join(" ") } },
-                        { match: { 'data.data.education': query.education.join(" ") } },
-                        { match: { 'data.data.achievement': query.achievement.join(" ") } },
-                        { match: { 'data.data.experience': query.experience.join(" ") } },
-                        { match: { 'data.data.certification': query.certification.join(" ") } },
-                        { match: { 'data.data.projects': query.projects.join(" ") } }
-                    ]
-                }
-            }
-        }
-    });
-}
-
-function searchByPhrase(indexName,query){
+function searchByPhrase(indexName,query) {
     return client.search({
         index:indexName,
         body: {
@@ -112,37 +109,31 @@ function searchByPhrase(indexName,query){
                         {
                             query_string : {
                                 fields: ['data.data.skills'],
-                                query: `"${query.skills.join('" OR "')}"`,
+                                query: `"${query.skills}"`,
                             },
                         },
                         {
                             query_string : {
                                 'fields': ['data.data.certification'],
-                                'query': `"${query.certification.join('" OR "')}"`
+                                'query': `"${query.certification}"`
                             }
                         },
                         {
                             query_string : {
                                 'fields': ['data.data.education'],
-                                'query': `"${query.education.join('" OR "')}"`
-                            },
-                        },
-                        {
-                            query_string : {
-                                'fields': ['data.data.achievements'],
-                                'query': `"${query.skills.join('" OR "')}"`
+                                'query': `"${query.education}"`
                             },
                         },
                         {
                             query_string : {
                                 'fields': ['data.data.experience'],
-                                'query': `"${query.experience.join('" OR "')}"`
+                                'query': `"${query.experience}"`
                             },
                         },
                         {
                             query_string : {
                                 'fields': ['data.data.projects'],
-                                'query': `"${query.projects.join('" OR "')}"`
+                                'query': `"${query.projects}"`
                             }
                         }
                     ]
@@ -156,10 +147,10 @@ module.exports = {
     indexExists: indexExists,
     createIndex: createIndex,
     bulkUpload: bulkUpload,
+    bulkUpdate: bulkUpdate,
     searchAll: searchAll,
     findById: findById,
     deleteById: deleteById,
     masterSearch: masterSearch,
-    searchByKeyword: searchByKeyword,
     searchByPhrase: searchByPhrase
 };

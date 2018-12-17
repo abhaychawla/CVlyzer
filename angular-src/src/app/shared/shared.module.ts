@@ -10,6 +10,7 @@ import { MaterialModule } from './material.module';
 
 /** Custom Components */
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { EmailDialogComponent } from './email-dialog/email-dialog.component';
 
 /**
  * Shared Module
@@ -21,9 +22,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     CommonModule,
     RouterModule,
     IconsModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  declarations: [ToolbarComponent],
+  declarations: [
+    ToolbarComponent,
+    EmailDialogComponent
+  ],
   exports: [
     ToolbarComponent,
     CommonModule,
@@ -32,6 +38,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  entryComponents: []
+  entryComponents: [
+    EmailDialogComponent
+  ]
 })
 export class SharedModule { }

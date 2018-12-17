@@ -5,6 +5,7 @@ export interface Student {
   email: string;
   profiles: Profiles;
   downloadUrl: string;
+  status: number;
 }
 
 export interface Profiles {

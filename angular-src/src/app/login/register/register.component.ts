@@ -15,6 +15,8 @@ import { AlertService } from '../../core/alert/alert.service';
 import { AuthenticationService } from '../../core/authentication/authentication.service';
 
 /** Custom Validators */
+import { usernameLowercaseValidator } from '../../shared/validators/username-lowercase.validator';
+import { emailValidator } from '../../shared/validators/email.validator';
 import { confirmPasswordValidator } from '../../shared/validators/confirm-password.validator';
 
 /**
@@ -71,8 +73,14 @@ export class RegisterComponent implements OnInit {
   private createRegistrationForm() {
     this.registrationForm = this.formBuilder.group({
       'name': ['', Validators.required],
-      'username': ['', Validators.required],
-      'email': ['', Validators.required],
+      'username': ['', [
+        Validators.required,
+        usernameLowercaseValidator()
+      ]],
+      'email': ['', [
+        Validators.required,
+        emailValidator()
+      ]],
       'password': ['', Validators.required],
       'confirmPassword': ['', Validators.required]
     }, { validator: confirmPasswordValidator });
