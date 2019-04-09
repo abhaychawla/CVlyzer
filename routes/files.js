@@ -43,33 +43,40 @@ router.post('/parse', passport.authenticate('jwt', { session: false }), (req, re
         promises.push(resumeParser.extractAndParseDataFromUrl(inputUrlPath));
     }
     Promise.all(promises).then(data => {
-        if (!elastic.indexExists(name)) {
-            elastic.createIndex(name)
-                .then(function(response) {
-                    console.log(`Create:  ${response}`);
-                    elastic.bulkUpload(name, data)
-                        .then(function(response) {
-                            // To prevent timelag issue
-                            setTimeout(() => {
-                                res.status(200).json({ success: true, response: data });
-                            }, 2000);
-                        }, function(err) {
-                            res.status(400).json({ success: false, err: err });
-                        });
-                }, function(err) {
-                    res.status(400).json({ success: false, err: err });
-                });
-        } else {
-            elastic.bulkUpload(name, data)
-                .then(function(response) {
-                    // To prevent timelag issue
-                    setTimeout(() => {
-                        res.status(200).json({ success: true, response: data });
-                    }, 10000);
-                }, function(err) {
-                    res.status(400).json({ success: false, err: err });
-                });
-        }
+        let rankingData = data.map((file) => file.data.data);
+        console.log(rankingData);
+        const spawn = require('child_process').spawn;
+        const process = spawn('python', ['./rankingResumes.py', rankingData]);
+        process.stdout.on('data', function (response) {
+            console.log(response);
+            if (!elastic.indexExists(name)) {
+                elastic.createIndex(name)
+                    .then(function(response) {
+                        console.log(`Create:  ${response}`);
+                        elastic.bulkUpload(name, data)
+                            .then(function(response) {
+                                // To prevent timelag issue
+                                setTimeout(() => {
+                                    res.status(200).json({ success: true, response: data });
+                                }, 2000);
+                            }, function(err) {
+                                res.status(400).json({ success: false, err: err });
+                            });
+                    }, function(err) {
+                        res.status(400).json({ success: false, err: err });
+                    });
+            } else {
+                elastic.bulkUpload(name, data)
+                    .then(function(response) {
+                        // To prevent timelag issue
+                        setTimeout(() => {
+                            res.status(200).json({ success: true, response: data });
+                        }, 10000);
+                    }, function(err) {
+                        res.status(400).json({ success: false, err: err });
+                    });
+            }
+        });
     });
 });
 
